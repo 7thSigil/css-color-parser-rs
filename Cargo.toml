@@ -1,0 +1,6 @@
+[package]
+name = "css-color-parser"
+version = "0.1.0"
+authors = ["Alexander Katkov <alexx.katkoff@gmail.com>"]
+
+[dependencies]
