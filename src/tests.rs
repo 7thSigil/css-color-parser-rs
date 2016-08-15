@@ -33,7 +33,7 @@ fn rgba() {
 #[test]
 fn abc() {
 	let c = "#fff".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 255, g: 255, b: 255, a: 0.5 });
+	assert_eq!(c, Color { r: 255, g: 255, b: 255, a: 1.0 });
 }
 
 #[test]

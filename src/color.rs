@@ -25,7 +25,7 @@
 use std::str;
 use std::error;
 use std::fmt;
-use std::cmp;
+use std::num;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Color {
@@ -212,9 +212,12 @@ static NAMED_COLORS: [NamedColor; 18] = [
 ];
 
 #[derive(Debug)]
-pub enum ColorParseError {
-	ParseError,
-	Empty
+pub struct ColorParseError;
+
+impl From<num::ParseIntError> for ColorParseError {
+	fn from(err: num::ParseIntError) -> ColorParseError {
+		return ColorParseError;
+	}
 }
 
 impl error::Error for ColorParseError {
@@ -233,6 +236,9 @@ impl fmt::Display for ColorParseError {
     }
 }
 
+
+//TODO(7thSigil): check if platform byte order affects parsing
+//TODO(7thSigil): maybe rewrite error handling into something more informative?
 impl str::FromStr for Color {
 
 	type Err = ColorParseError;
@@ -247,7 +253,7 @@ impl str::FromStr for Color {
 
 		if string.is_empty()
 		{
-			return Err(ColorParseError::Empty);
+			return Err(ColorParseError);
 		}
 
 		let mut iterator = NAMED_COLORS.iter();
@@ -263,12 +269,53 @@ impl str::FromStr for Color {
 			let string_char_count = string.chars().count();
 
 			if string_char_count == 4 {
+				let (_, value_string) = string.split_at(1);
 
+				let iv = try!(u64::from_str_radix(value_string, 16));
+
+				//unlike original js code, NaN is impossible ()
+				if !(iv <= 0xfff) {
+					return Err(ColorParseError); 
+				}
+
+				return Ok (Color { r: (((iv & 0xf00) >> 4) | ((iv & 0xf00) >> 8)) as u8,
+								   g: ((iv & 0xf0) | ((iv & 0xf0) >> 4)) as u8,
+								   b: ((iv & 0xf) | ((iv & 0xf) << 4)) as u8,
+								   a: 1.0 
+								});
+			} 
+			else if string_char_count == 7 {
+				let (_, value_string) = string.split_at(1);
+
+				let iv = try!(u64::from_str_radix(value_string, 16));
+
+				//(7thSigil) unlike original js code, NaN is impossible
+				if !(iv <= 0xffffff) {
+					return Err(ColorParseError); 
+				}
+
+				return Ok (Color { r: ((iv & 0xff0000) >> 16) as u8,
+								   g: ((iv & 0xff00) >> 8) as u8,
+								   b: (iv & 0xff) as u8,
+								   a: 1.0 
+								});
 			}
+
+			return Err(ColorParseError);
 		}
 
-		return Err(ColorParseError::ParseError);
+		let op = try!(string.find("(").ok_or(ColorParseError));
+		let ep = try!(string.find(")").ok_or(ColorParseError));
 
-		//panic!("NotImplemented!");
+		if (ep + 1) != string.len() {
+			return Err(ColorParseError);
+		}
+
+		//TODO(7thSigil): parse rgba fmt
+		//TODO(7thSigil): parse rgb fmt
+		//TODO(7thSigil): parse hsla fmt
+		//TODO(7thSigil): parse hsl fmt
+
+		return Err(ColorParseError);
 	}
 }
