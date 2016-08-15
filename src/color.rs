@@ -25,8 +25,9 @@
 use std::str;
 use std::error;
 use std::fmt;
+use std::cmp;
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Color {
 	pub r : u8,
 	pub g : u8,
@@ -212,7 +213,8 @@ static NAMED_COLORS: [NamedColor; 18] = [
 
 #[derive(Debug)]
 pub enum ColorParseError {
-	ParseError
+	ParseError,
+	Empty
 }
 
 impl error::Error for ColorParseError {
@@ -243,10 +245,26 @@ impl str::FromStr for Color {
 		string = string.replace(" ", "")
 					   .to_lowercase();
 
+		if string.is_empty()
+		{
+			return Err(ColorParseError::Empty);
+		}
+
 		let mut iterator = NAMED_COLORS.iter();
 
+		// Color keywords (and transparent) lookup.
 		while let Some(named_color) = iterator.next() {
-			if named_color.name == string { return Ok ( named_color.color ); }
+			if named_color.name == string { 
+				return Ok ( named_color.color ); 
+			}
+		}
+
+		if string.starts_with("#") {
+			let string_char_count = string.chars().count();
+
+			if string_char_count == 4 {
+
+			}
 		}
 
 		return Err(ColorParseError::ParseError);
