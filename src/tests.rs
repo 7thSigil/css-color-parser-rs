@@ -56,12 +56,14 @@ fn named_color() {
 
 #[test]
 #[should_panic]
+#[allow(unused_variables)]
 fn invalid_color1() {
 	let c = "blah".parse::<Color>().unwrap();
 }
 
 #[test]
 #[should_panic]
+#[allow(unused_variables)]
 fn invalid_color2() {
 	let c = "ffffff".parse::<Color>().unwrap();
 }
@@ -74,6 +76,7 @@ fn hsla() {
 
 #[test]
 #[should_panic]
+#[allow(unused_variables)]
 fn hsla_invalid() {
 	let c = "hsla(900, 15%, 90%)".parse::<Color>().unwrap();
 }

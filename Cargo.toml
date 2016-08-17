@@ -1,6 +1,6 @@
 [package]
-name = "css-color-parser"
+name = "css_color_parser"
 version = "0.1.0"
-authors = ["Alexander Katkov <alexx.katkoff@gmail.com>"]
+authors = ["Katkov Oleksandr <alexx.katkoff@gmail.com>"]
 
 [dependencies]
