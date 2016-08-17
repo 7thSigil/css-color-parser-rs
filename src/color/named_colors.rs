@@ -29,12 +29,13 @@ pub struct NamedColor {
 	pub color: Color
 }
 
-// http://www.w3.org/TR/css3-color/
-//(7thSigil converted streight from css-color-parser-js with this)
+//(7thSigil) converted straight from css-color-parser-js with this:
 // for (var key in kCSSColorTable) {
 //     var obj = kCSSColorTable[key]; 
 //     console.log("NamedColor { name: \"" + key + "\", color: Color { r: " + obj[0] + ", g: " + obj[1] + ", b: " + obj[2] + ", a: " + obj[3] + ".0 } },");
 // }
+/// List of CSS3 named colors
+/// http://www.w3.org/TR/css3-color/
 pub static NAMED_COLORS: [NamedColor; 148] = [
 	NamedColor { name: "transparent", color: Color { r: 0, g: 0, b: 0, a: 0.0 } },
 	NamedColor { name: "aliceblue", color: Color { r: 240, g: 248, b: 255, a: 1.0 } },

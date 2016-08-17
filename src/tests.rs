@@ -92,3 +92,36 @@ fn hsl_non_spec_compliant() {
 	let c = "hsl(900, 0.15, 90%)".parse::<Color>().unwrap();
 	assert_eq!(c, Color { r: 226, g: 233, b: 233, a: 1.0 });
 }
+
+// This test is disabled due to practicality concerns
+// Passes but takes quite a long time to do so ~16+ million combinations
+// #[test]
+// fn rgb_range_test() {
+// 	for r in 0..255 {
+// 		for g in 0..255 {
+// 			for b in 0..255 {
+// 				let c = format!("rgb({}, {}, {})", r, g, b).parse::<Color>().unwrap();
+// 				assert_eq!(c, Color { r: r, g: g, b: b, a: 1.0 });
+// 			}
+// 		}
+// 	}
+// }
+
+// This test is disabled due to practicality concerns
+// Passes but takes quite a long time to do so ~160 million combinations
+// #[test]
+// fn rgba_range_test() {
+// 	for r in 0..255 {
+// 		for g in 0..255 {
+// 			for b in 0..255 {
+// 				let mut a = 0.0;
+
+// 				while a <= 1.0 {
+// 					let c = format!("rgba({}, {}, {}, {})", r, g, b, a).parse::<Color>().unwrap();
+// 					assert_eq!(c, Color { r: r, g: g, b: b, a: a });
+// 					a+=0.1;
+// 				}
+// 			}
+// 		}
+// 	}
+// }

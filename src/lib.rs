@@ -22,6 +22,73 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+//! Easy-to-use Rust parser for CSS3 color strings.
+//!
+//! Handles all errors to avoid panic!s.
+//!
+//! Not 100% spec compliant in the name of convenience (see examples below):
+//!
+//!  * allows for extra whitespaces
+//!
+//!  * allows for floats where standard allows percentages only
+//!
+//! CSS3 Color spec: 
+//!
+//! http://www.w3.org/TR/css3-color/
+//!
+//! https://developer.mozilla.org/en-US/docs/Web/CSS/color
+//!
+//! Repository:
+//!
+//! https://github.com/7thSigil/css-color-parser-rs.git
+//!
+//! #Examples
+//!
+//! 	use css_color_parser::Color as CssColor;
+//!
+//!     let transparent_black = CssColor { r: 0, g: 0, b: 0, a: 1.0 };
+//!
+//!     println!("{:?}", " rgba (255, 128, 12, 0.5)".parse::<CssColor>()
+//!         	.unwrap_or(transparent_black));
+//!     //Color { r: 255, g: 128, b: 12, a: 0.5 }
+//!
+//!     println!("{:?}", "#fff".parse::<CssColor>()
+//!         .unwrap_or(transparent_black));
+//!     //Color { r: 255, g: 255, b: 255, a: 1 }
+//!
+//!     println!("{:?}", "#ff0011".parse::<CssColor>()
+//!         .unwrap_or(transparent_black));
+//!     //Color { r: 255, g: 0, b: 17, a: 1 }
+//!
+//!     println!("{:?}", "slateblue".parse::<CssColor>()
+//!         .unwrap_or(transparent_black));
+//!     //Color { r: 106, g: 90, b: 205, a: 1 }
+//!
+//!     println!("{:?}", "blah".parse::<CssColor>()
+//!         .unwrap_or(transparent_black));
+//!     //Color { r: 0, g: 0, b: 0, a: 0 } - ColorParseError
+//!
+//!     println!("{:?}", "ffffff".parse::<CssColor>()
+//!         .unwrap_or(transparent_black));
+//!     //Color { r: 0, g: 0, b: 0, a: 0 } - ColorParseError
+//!
+//!     println!("{:?}", "hsla(900, 15%, 90%, 0.5)".parse::<CssColor>()
+//!         .unwrap_or(transparent_black));
+//!     //Color { r: 226, g: 233, b: 233, a: 0.5 }
+//!
+//!     println!("{:?}", "hsla(900, 15%, 90%)".parse::<CssColor>()
+//!         .unwrap_or(transparent_black));
+//!     //Color { r: 0, g: 0, b: 0, a: 0 } - ColorParseError
+//!   	println!("{:?}", "hsl(900, 15%, 90%)".parse::<CssColor>()
+//!         .unwrap_or(transparent_black));
+//!     //Color { r: 226, g: 233, b: 233, a: 1 }
+//!
+//!    	// NOTE: not spec compliant.
+//!    	println!("{:?}", "hsl(900, 0.15, 90%)".parse::<CssColor>()
+//!        .unwrap_or(transparent_black)); 
+//!     //Color { r: 226, g: 233, b: 233, a: 1 }
+//!
+
 pub use self::color::color::Color;
 pub use self::color::named_colors::NAMED_COLORS;
 

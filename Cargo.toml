@@ -1,5 +1,5 @@
 [package]
-name = "css_color_parser"
+name = "css-color-parser"
 version = "0.1.0"
 authors = ["Katkov Oleksandr <alexx.katkoff@gmail.com>"]
 

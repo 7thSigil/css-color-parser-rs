@@ -30,11 +30,18 @@ use std::str::FromStr;
 
 use color::named_colors::NAMED_COLORS;
 
+///Color in rgba format, 
+///where {red,green,blue} in 0..255, 
+///alpha in 0.0..1.0
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Color {
+	///red channel, ranges from 0 to 255
 	pub r : u8,
+	///green channel, ranges from 0 to 255
 	pub g : u8,
+	///blue channel, ranges from 0 to 255
 	pub b : u8,
+	///alpha channel, ranges from 0.0 to 1.0
 	pub a : f32
 }
 
@@ -79,6 +86,8 @@ impl fmt::Display for ColorParseError {
 
 //TODO(7thSigil): check if platform byte order affects parsing
 //TODO(7thSigil): maybe rewrite error handling into something more informative?
+///Parses CSS3 color strings into rgba Color.
+///Handles all errors to avoid any panic!s
 impl str::FromStr for Color {
 
 	type Err = ColorParseError;
