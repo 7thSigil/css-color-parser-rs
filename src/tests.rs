@@ -20,9 +20,15 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-// IN THE SOFTWARE.
+// I N THE SOFTWARE.
 
 use color::Color;
+
+#[test]
+fn rgb() {
+	let c = " rgb(255, 128, 12)".parse::<Color>().unwrap();
+	assert_eq!(c, Color { r: 255, g: 128, b: 12, a: 1.0 });
+}
 
 #[test]
 fn rgba() {

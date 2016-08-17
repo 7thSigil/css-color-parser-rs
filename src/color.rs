@@ -26,6 +26,7 @@ use std::str;
 use std::error;
 use std::fmt;
 use std::num;
+use std::str::FromStr;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Color {
@@ -220,6 +221,12 @@ impl From<num::ParseIntError> for ColorParseError {
 	}
 }
 
+impl From<num::ParseFloatError> for ColorParseError {
+	fn from(err: num::ParseFloatError) -> ColorParseError {
+		return ColorParseError;
+	}
+}
+
 impl error::Error for ColorParseError {
     fn description(&self) -> &str {
         panic!("NotImplemented!");
@@ -307,15 +314,230 @@ impl str::FromStr for Color {
 		let op = try!(string.find("(").ok_or(ColorParseError));
 		let ep = try!(string.find(")").ok_or(ColorParseError));
 
-		if (ep + 1) != string.len() {
+		//(7thSigil) validating format
+		//')' bracket should be at the end
+		//and always after the opening bracket
+		if (ep + 1) != string.len() || ep < op {
 			return Err(ColorParseError);
 		}
 
-		//TODO(7thSigil): parse rgba fmt
-		//TODO(7thSigil): parse rgb fmt
-		//TODO(7thSigil): parse hsla fmt
-		//TODO(7thSigil): parse hsl fmt
+		//(7thSigil) extracting format
+		let (fmt, right_string_half) = string.split_at(op);
+
+		//(7thSigil) validating format
+		if fmt.is_empty() {
+			return Err(ColorParseError);
+		}
+
+		//removing brackets
+		let mut filtered_right_string_half = right_string_half.to_string();
+
+		//removing brackets
+		filtered_right_string_half.remove(0);
+		filtered_right_string_half.pop();
+
+		let params: Vec<&str> = filtered_right_string_half.split(",").collect();
+
+		//(7thSigil) validating format
+		if params.len() < 3 || params.len() > 4 {
+			return Err(ColorParseError);
+		} 
+
+		if fmt == "rgba"
+		{
+			return parse_rgba(params);
+		} 
+		else if fmt == "rgb" {
+			return parse_rgb(params);
+		}
+		else if fmt == "hsla" {
+			return parse_hsla(params);
+		} 
+		else if fmt == "hsl" {
+			return parse_hsl(params);
+		}
 
 		return Err(ColorParseError);
 	}
+}
+
+fn parse_rgba(mut rgba: Vec<&str>) -> Result<Color, ColorParseError> {
+
+	if rgba.len() != 4 {
+		return Err(ColorParseError);
+	}
+
+	let a_str = try!(rgba.pop().ok_or(ColorParseError));
+
+	let a = try!(parse_css_float(a_str));
+
+	let mut rgb_color = try!(parse_rgb(rgba));
+
+	rgb_color = Color { a: a, .. rgb_color };
+
+	return Ok(rgb_color);
+}
+
+fn parse_rgb(mut rgb: Vec<&str>) -> Result<Color, ColorParseError> {
+
+	if rgb.len() != 3 {
+		return Err(ColorParseError);
+	}
+
+	let b_str = try!(rgb.pop().ok_or(ColorParseError));
+	let g_str = try!(rgb.pop().ok_or(ColorParseError));
+	let r_str = try!(rgb.pop().ok_or(ColorParseError));
+
+	let r = try!(parse_css_int(r_str));
+	let g = try!(parse_css_int(g_str));
+	let b = try!(parse_css_int(b_str));
+
+	return Ok(Color { r: r, g: g, b: b, a: 1.0 })
+}
+
+fn parse_hsla (mut hsla: Vec<&str>) -> Result<Color, ColorParseError> {
+
+	if hsla.len() != 4 {
+		return Err(ColorParseError);
+	}
+
+	let a_str = try!(hsla.pop().ok_or(ColorParseError));
+
+	let a = try!(parse_css_float(a_str));
+
+	//(7thSigil) Parsed from hsl to rgb representation
+	let mut rgb_color : Color = try!(parse_hsl(hsla));
+
+	rgb_color = Color { a: a, .. rgb_color };
+
+	return Ok(rgb_color);
+}
+
+fn parse_hsl (mut hsl: Vec<&str>) -> Result<Color, ColorParseError> {
+
+	if hsl.len() != 3 {
+		return Err(ColorParseError);
+	}
+
+	let l_str = try!(hsl.pop().ok_or(ColorParseError));
+	let s_str = try!(hsl.pop().ok_or(ColorParseError));
+	let h_str = try!(hsl.pop().ok_or(ColorParseError));
+
+	let mut h = try!(f32::from_str(h_str));
+
+	// 0 .. 1
+	h = (((h % 360.0) + 360.0) % 360.0) / 360.0; 
+
+	// NOTE(deanm): According to the CSS spec s/l should only be
+	// percentages, but we don't bother and let float or percentage.
+
+	let s = try!(parse_css_float(s_str));
+	let l = try!(parse_css_float(l_str));
+
+	let m2: f32;
+
+	if l <= 0.5 {
+		m2 = l * (s + 1.0)
+	} else {
+		m2= l + s - l * s;
+	}
+
+	let m1 = l * 2.0 - m2;
+
+	let r = clamp_css_byte_from_float(css_hue_to_rgb(m1, m2, h+1.0/3.0) * 255.0);
+	let g = clamp_css_byte_from_float(css_hue_to_rgb(m1, m2, h) * 255.0);
+	let b = clamp_css_byte_from_float(css_hue_to_rgb(m1, m2, h-1.0/3.0) * 255.0);
+
+	return Ok(Color { r: r, g: g, b: b, a: 1.0 });
+}
+
+//float or percentage.
+fn parse_css_float(fv_str: &str) -> Result<f32, num::ParseFloatError> {
+
+	let fv: f32; 
+
+	if fv_str.ends_with("%") {
+		let mut percentage_string = fv_str.to_string();
+		percentage_string.pop();
+		fv = try!(f32::from_str(&percentage_string));
+		return Ok(clamp_css_float(fv / 100.0));
+	}
+
+	fv = try!(f32::from_str(fv_str));
+	return Ok(clamp_css_float(fv));
+}
+
+// int or percentage.
+fn parse_css_int(iv_or_percentage_str: &str) -> Result<u8, ColorParseError> {
+	if iv_or_percentage_str.ends_with("%") {
+
+		let mut percentage_string = iv_or_percentage_str.to_string();
+		percentage_string.pop();
+		let fv = try!(f32::from_str(&percentage_string));
+		// Seems to be what Chrome does (round vs truncation).
+		return Ok(clamp_css_byte_from_float(fv / 100.0 * 255.0));
+	}
+
+	let iv = try!(u32::from_str(iv_or_percentage_str));
+
+	return Ok(clamp_css_byte(iv));
+}
+
+// Clamp to float 0.0 .. 1.0.
+fn clamp_css_float(fv: f32) -> f32 {  
+	//return fv < 0 ? 0 : fv > 1 ? 1 : fv;
+	if fv < 0.0 {
+		0.0 
+	} else if fv > 1.0 {
+		1.0
+	}
+	else {
+	    fv
+	}
+}
+
+fn clamp_css_byte_from_float(mut fv: f32) -> u8 {  // Clamp to integer 0 .. 255.
+	// Seems to be what Chrome does (vs truncation).
+  	fv = fv.round();  
+
+  	// return iv < 0 ? 0 : iv > 255 ? 255 : iv;
+	if fv < 0.0 {
+		0 
+	} else if fv > 255.0 {
+		255
+	}
+	else {
+	    fv as u8
+	}
+}
+
+fn clamp_css_byte(iv: u32) -> u8 {  // Clamp to integer 0 .. 255.
+  	// return iv < 0 ? 0 : iv > 255 ? 255 : iv;
+  	if iv > 255 {
+		255
+	}
+	else {
+	    iv as u8
+	}
+}
+
+fn css_hue_to_rgb(m1: f32, m2: f32, mut h: f32) -> f32 {
+	if h < 0.0 {
+		h+=1.0;
+	} 
+	else if h > 1.0 {
+		h-= 1.0;
+	}
+
+	if h * 6.0 < 1.0 {
+		return m1 + (m2 - m1) * h * 6.0;
+	}
+	if h * 2.0 < 1.0 {
+		return m2;
+	}
+	if h * 3.0 < 2.0 {
+		return m1 + (m2 - m1) * (2.0/3.0 - h) * 6.0;
+	}
+
+	return m1;
 }
