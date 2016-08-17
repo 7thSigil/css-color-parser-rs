@@ -1,6 +1,6 @@
-Easy-to-use Rust parser for CSS3 color strings.
-Lightweight (Doesn't have any dependencies besides std lib).
-Handles all errors to avoid panic!s.
+Easy-to-use Rust parser for CSS3 color strings.<br>
+Lightweight (Doesn't have any dependencies besides std lib).<br>
+Reliable (Provides tests, handles all errors to avoid panic!s).<br>
 
 Not 100% spec compliant in the name of convenience (see examples below):
   * allows for extra whitespaces
