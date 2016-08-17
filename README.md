@@ -4,15 +4,15 @@ Handles all errors to avoid panic!s.
 Not 100% spec compliant in the name of convenience (see examples below):
   * allows for extra whitespaces
   * allows for floats where standard allows percentages only
-
-CSS3 Color spec: 
+ 
+CSS3 Color spec:
 http://www.w3.org/TR/css3-color/
 https://developer.mozilla.org/en-US/docs/Web/CSS/color
 
 Repository:
 https://github.com/7thSigil/css-color-parser-rs.git
 
-[Documentation](https://7thSigil.github.io/css-color-parser-rs/css_color_parser/index.html)
+##[Link to the Documentation](https://7thSigil.github.io/css-color-parser-rs/css_color_parser/index.html)
 
 Cargo.toml:
 
