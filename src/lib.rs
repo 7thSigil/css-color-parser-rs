@@ -22,6 +22,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+pub use self::color::color::Color;
+pub use self::color::named_colors::NAMED_COLORS;
+
 mod color;
 
 #[cfg(test)]

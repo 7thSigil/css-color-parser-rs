@@ -2,27 +2,47 @@ https://github.com/7thSigil/css-color-parser-rs.git
 
 Rust parser for CSS color strings.
 
-> parseCSSColor(' rgba (255, 128, 12, 0.5)');
- [ 255, 128, 12, 0.5 ]
-> parseCSSColor('#fff');
- [ 255, 255, 255, 1 ]
-> parseCSSColor('#ff0011');
- [ 255, 0, 17, 1 ]
-> parseCSSColor('slateblue');
- [ 106, 90, 205, 1 ]
-> parseCSSColor('blah');
- null
-> parseCSSColor('ffffff');
- null
-> parseCSSColor('hsla(900, 15%, 90%, 0.5)')
- [ 226, 233, 233, 0.5 ]
-> parseCSSColor('hsla(900, 15%, 90%)')
- null
-> parseCSSColor('hsl(900, 15%, 90%)')
- [ 226, 233, 233, 1 ]
-> parseCSSColor('hsl(900, 0.15, 90%)')  // NOTE: not spec compliant.
- [ 226, 233, 233, 1 ]
+//Example
 
+extern crate css_color_parser;
+
+use css_color_parser::Color as CssColor;
+use std::str::FromStr;
+
+fn main() {
+
+	let transparent_black = CssColor { r: 0, g: 0, b: 0, a: 1.0 };
+
+    println!("{:?}", CssColor::from_str(" rgba (255, 128, 12, 0.5)").unwrap_or(transparent_black));
+	//Color { r: 255, g: 128, b: 12, a: 0.5 }
+
+    println!("{:?}", CssColor::from_str("#fff").unwrap_or(transparent_black));
+    //Color { r: 255, g: 255, b: 255, a: 1 }
+
+    println!("{:?}", CssColor::from_str("#ff0011").unwrap_or(transparent_black));
+    //Color { r: 255, g: 0, b: 17, a: 1 }
+
+    println!("{:?}", CssColor::from_str("slateblue").unwrap_or(transparent_black));
+    //Color { r: 106, g: 90, b: 205, a: 1 }
+
+    println!("{:?}", CssColor::from_str("blah").unwrap_or(transparent_black));
+	//Color { r: 0, g: 0, b: 0, a: 0 } - ColorParseError
+
+    println!("{:?}", CssColor::from_str("ffffff").unwrap_or(transparent_black));
+    //Color { r: 0, g: 0, b: 0, a: 0 } - ColorParseError
+
+    println!("{:?}", CssColor::from_str("hsla(900, 15%, 90%, 0.5)").unwrap_or(transparent_black));
+	//Color { r: 226, g: 233, b: 233, a: 0.5 }
+
+    println!("{:?}", CssColor::from_str("hsla(900, 15%, 90%)").unwrap_or(transparent_black));
+	//Color { r: 0, g: 0, b: 0, a: 0 } - ColorParseError
+
+    println!("{:?}", CssColor::from_str("hsl(900, 15%, 90%)").unwrap_or(transparent_black));
+	//Color { r: 226, g: 233, b: 233, a: 1 }
+
+    println!("{:?}", CssColor::from_str("hsl(900, 0.15, 90%)").unwrap_or(transparent_black)); // NOTE: not spec compliant.
+	//Color { r: 226, g: 233, b: 233, a: 1 }
+}
 
 (c) Dean McNamee <dean@gmail.com>, 2012.
 (c) Katkov Oleksandr <alexx.katkoff@gmail.com>, 2016.

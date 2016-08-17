@@ -22,8 +22,5 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-pub use self::color::Color;
-pub use self::named_colors::NAMED_COLORS;
-
-mod color;
-mod named_colors;
+pub mod color;
+pub mod named_colors;
