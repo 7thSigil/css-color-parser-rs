@@ -17,14 +17,16 @@ https://github.com/deanm/css-color-parser-js
 
 ##[Link to the Documentation](https://7thSigil.github.io/css-color-parser-rs/css_color_parser/index.html)
 
-Cargo.toml:
+#### Cargo.toml:
 
+```
 [dependencies]
 css-color-parser = *
-
-//Example
+```
 
 ```rust
+
+#### Example
 
 extern crate css_color_parser;
 
