@@ -22,24 +22,19 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-//! Easy-to-use Rust parser for CSS3 color strings.
+//! Easy-to-use Rust parser for CSS3 color strings.<br>
+//! Lightweight (Doesn't have any dependencies besides std lib).<br>
+//! Reliable (Provides tests, handles all errors to avoid panic!s).<br>
 //!
-//! Handles all errors to avoid panic!s.
+//! Not 100% spec compliant in the name of convenience (see examples below):<br>
+//!  * allows for extra whitespaces<br>
+//!  * allows for floats where standard allows percentages only<br>
 //!
-//! Not 100% spec compliant in the name of convenience (see examples below):
+//! CSS3 Color spec: <br>
+//! http://www.w3.org/TR/css3-color/<br>
+//! https://developer.mozilla.org/en-US/docs/Web/CSS/color<br>
 //!
-//!  * allows for extra whitespaces
-//!
-//!  * allows for floats where standard allows percentages only
-//!
-//! CSS3 Color spec: 
-//!
-//! http://www.w3.org/TR/css3-color/
-//!
-//! https://developer.mozilla.org/en-US/docs/Web/CSS/color
-//!
-//! Repository:
-//!
+//! Repository:<br>
 //! https://github.com/7thSigil/css-color-parser-rs.git
 //!
 //! #Examples

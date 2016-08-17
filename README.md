@@ -2,18 +2,18 @@ Easy-to-use Rust parser for CSS3 color strings.<br>
 Lightweight (Doesn't have any dependencies besides std lib).<br>
 Reliable (Provides tests, handles all errors to avoid panic!s).<br>
 
-Not 100% spec compliant in the name of convenience (see examples below):
-  * allows for extra whitespaces
-  * allows for floats where standard allows percentages only
+Not 100% spec compliant in the name of convenience (see examples below):<br>
+  * allows for extra whitespaces<br>
+  * allows for floats where standard allows percentages only<br>
  
 [W3C CSS3 Color spec](http://www.w3.org/TR/css3-color/)
 
 [Mozilla CSS3 Color spec](https://developer.mozilla.org/en-US/docs/Web/CSS/color)
 
-Repository:
+Repository:<br>
 https://github.com/7thSigil/css-color-parser-rs.git
 
-Original js parser:
+Original js parser:<br>
 https://github.com/deanm/css-color-parser-js
 
 ##[Link to the Documentation](https://7thSigil.github.io/css-color-parser-rs/css_color_parser/index.html)
