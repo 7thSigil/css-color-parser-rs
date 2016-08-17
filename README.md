@@ -24,9 +24,9 @@ https://github.com/deanm/css-color-parser-js
 css-color-parser = *
 ```
 
-```rust
-
 #### Example
+
+```rust
 
 extern crate css_color_parser;
 
