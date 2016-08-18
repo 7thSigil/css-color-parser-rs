@@ -37,6 +37,9 @@
 //! Repository:<br>
 //! https://github.com/7thSigil/css-color-parser-rs.git
 //!
+//! Original js parser:<br>
+//! https://github.com/deanm/css-color-parser-js
+//!
 //! #Examples
 //!
 //! 	use css_color_parser::Color as CssColor;
