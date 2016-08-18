@@ -22,7 +22,7 @@ https://github.com/deanm/css-color-parser-js
 
 ```
 [dependencies]
-css-color-parser = *
+css-color-parser = "*"
 ```
 
 #### Example
