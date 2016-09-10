@@ -10,3 +10,6 @@ homepage = "https://github.com/7thSigil/css-color-parser-rs"
 readme = "README.md"
 keywords = ["parser", "color", "colour", "css", "css3"]
 license = "MIT"
+
+[dependencies]
+lazy_static = "0.1.*"

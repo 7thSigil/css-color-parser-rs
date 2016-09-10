@@ -107,13 +107,8 @@ impl str::FromStr for Color {
             return Err(ColorParseError);
         }
 
-        let mut iterator = NAMED_COLORS.iter();
-
-        // Color keywords (and transparent) lookup.
-        while let Some(named_color) = iterator.next() {
-            if named_color.name == string {
-                return Ok(named_color.color);
-            }
+        if let Some(&color) = NAMED_COLORS.get(&*string) {
+            return Ok(color);
         }
 
         if string.starts_with("#") {

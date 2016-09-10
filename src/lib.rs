@@ -87,6 +87,9 @@
 //!     //Color { r: 226, g: 233, b: 233, a: 1 }
 //!
 
+#[macro_use]
+extern crate lazy_static;
+
 pub use self::color::color::Color;
 pub use self::color::named_colors::NAMED_COLORS;
 
