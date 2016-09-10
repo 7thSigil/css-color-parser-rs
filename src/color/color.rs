@@ -97,15 +97,14 @@ impl str::FromStr for Color {
     type Err = ColorParseError;
 
     fn from_str(s: &str) -> Result<Self, ColorParseError> {
-        let mut string = s.to_string();
-
-        // Remove all whitespace, not compliant, but should just be more accepting.
-        string = string.replace(" ", "")
-            .to_lowercase();
-
-        if string.is_empty() {
+        let s = s.trim();
+        if s.is_empty() {
             return Err(ColorParseError);
         }
+
+        // Remove all whitespace, not compliant, but should just be more accepting.
+        let string = s.replace(' ', "");
+        string.make_ascii_lowercase();
 
         if let Some(&color) = NAMED_COLORS.get(&*string) {
             return Ok(color);
