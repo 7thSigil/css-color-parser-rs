@@ -83,7 +83,7 @@
 //!
 //!    	// NOTE: not spec compliant.
 //!    	println!("{:?}", "hsl(900, 0.15, 90%)".parse::<CssColor>()
-//!        .unwrap_or(transparent_black)); 
+//!        .unwrap_or(transparent_black));
 //!     //Color { r: 226, g: 233, b: 233, a: 1 }
 //!
 
