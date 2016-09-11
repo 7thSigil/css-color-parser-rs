@@ -1,5 +1,5 @@
 Easy-to-use Rust parser for CSS3 color strings.<br>
-Lightweights.<br>
+Lightweight.<br>
 Reliable (Provides tests, handles all errors to avoid panic!s).<br>
 
 Not 100% spec compliant in the name of convenience (see examples below):<br>
