@@ -26,71 +26,119 @@ use color::color::Color;
 
 #[test]
 fn rgb() {
-	let c = " rgb(255, 128, 12)".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 255, g: 128, b: 12, a: 1.0 });
+    let c = " rgb(255, 128, 12)".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 255,
+                   g: 128,
+                   b: 12,
+                   a: 1.0,
+               });
 }
 
 #[test]
 fn rgba() {
-	let c = " rgba (255, 128, 12, 0.5)".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 255, g: 128, b: 12, a: 0.5 });
+    let c = " rgba (255, 128, 12, 0.5)".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 255,
+                   g: 128,
+                   b: 12,
+                   a: 0.5,
+               });
 }
 
 #[test]
 fn abc() {
-	let c = "#fff".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 255, g: 255, b: 255, a: 1.0 });
+    let c = "#fff".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 255,
+                   g: 255,
+                   b: 255,
+                   a: 1.0,
+               });
 }
 
 #[test]
 fn abc123() {
-	let c = "#ff0011".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 255, g: 0, b: 17, a: 1.0 });
+    let c = "#ff0011".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 255,
+                   g: 0,
+                   b: 17,
+                   a: 1.0,
+               });
 }
 
 #[test]
 fn named_color() {
-	let c = "slateblue".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 106, g: 90, b: 205, a: 1.0 });
+    let c = "slateblue".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 106,
+                   g: 90,
+                   b: 205,
+                   a: 1.0,
+               });
 }
 
 #[test]
 #[should_panic]
 #[allow(unused_variables)]
 fn invalid_color1() {
-	let c = "blah".parse::<Color>().unwrap();
+    let c = "blah".parse::<Color>().unwrap();
 }
 
 #[test]
 #[should_panic]
 #[allow(unused_variables)]
 fn invalid_color2() {
-	let c = "ffffff".parse::<Color>().unwrap();
+    let c = "ffffff".parse::<Color>().unwrap();
 }
 
 #[test]
 fn hsla() {
-	let c = "hsla(900, 15%, 90%, 0.5)".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 226, g: 233, b: 233, a: 0.5 });
+    let c = "hsla(900, 15%, 90%, 0.5)".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 226,
+                   g: 233,
+                   b: 233,
+                   a: 0.5,
+               });
 }
 
 #[test]
 #[should_panic]
 #[allow(unused_variables)]
 fn hsla_invalid() {
-	let c = "hsla(900, 15%, 90%)".parse::<Color>().unwrap();
+    let c = "hsla(900, 15%, 90%)".parse::<Color>().unwrap();
 }
 
 #[test]
 fn hsl() {
-	let c = "hsl(900, 15%, 90%)".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 226, g: 233, b: 233, a: 1.0 });
+    let c = "hsl(900, 15%, 90%)".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 226,
+                   g: 233,
+                   b: 233,
+                   a: 1.0,
+               });
 }
 
 #[test]
 fn hsl_non_spec_compliant() {
-	let c = "hsl(900, 0.15, 90%)".parse::<Color>().unwrap();
-	assert_eq!(c, Color { r: 226, g: 233, b: 233, a: 1.0 });
+    let c = "hsl(900, 0.15, 90%)".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 226,
+                   g: 233,
+                   b: 233,
+                   a: 1.0,
+               });
 }
 
 // This test is disabled due to practicality concerns

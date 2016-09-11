@@ -23,7 +23,7 @@
 // IN THE SOFTWARE.
 
 //! Easy-to-use Rust parser for CSS3 color strings.<br>
-//! Lightweight (Doesn't have any dependencies besides std lib).<br>
+//! Lightweight.<br>
 //! Reliable (Provides tests, handles all errors to avoid panic!s).<br>
 //!
 //! Not 100% spec compliant in the name of convenience (see examples below):<br>
@@ -83,9 +83,12 @@
 //!
 //!    	// NOTE: not spec compliant.
 //!    	println!("{:?}", "hsl(900, 0.15, 90%)".parse::<CssColor>()
-//!        .unwrap_or(transparent_black)); 
+//!        .unwrap_or(transparent_black));
 //!     //Color { r: 226, g: 233, b: 233, a: 1 }
 //!
+
+#[macro_use]
+extern crate lazy_static;
 
 pub use self::color::color::Color;
 pub use self::color::named_colors::NAMED_COLORS;
