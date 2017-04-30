@@ -90,7 +90,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-pub use self::color::color::Color;
+pub use self::color::color::{Color, ColorParseError};
 pub use self::color::named_colors::NAMED_COLORS;
 
 mod color;
