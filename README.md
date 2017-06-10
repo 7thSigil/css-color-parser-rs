@@ -1,4 +1,4 @@
-[![Crates.io](https://img.shields.io/crates/v/css-color-parser.svg)](https://crates.io/crates/css-color-parser) [![Build Status](https://travis-ci.org/7thSigil/css-color-parser-rs.svg?branch=master)](https://travis-ci.org/7thSigil/css-color-parser-rs)
+[![Crates.io](https://img.shields.io/crates/v/css-color-parser.svg)](https://crates.io/crates/css-color-parser) [![Build Status](https://travis-ci.org/7thSigil/css-color-parser-rs.svg?branch=master)](https://travis-ci.org/7thSigil/css-color-parser-rs) [![Codecov branch](https://img.shields.io/codecov/c/github/7thSigil/css-color-parser-rs/master.svg)](https://codecov.io/gh/7thSigil/css-color-parser-rs)
 
 Easy-to-use Rust parser for CSS3 color strings.<br>
 Lightweight.<br>
