@@ -141,35 +141,39 @@ fn hsl_non_spec_compliant() {
                });
 }
 
-// This test is disabled due to practicality concerns
+// This test is disabled by default due to practicality concerns
 // Passes but takes quite a long time to do so ~16+ million combinations
-// #[test]
-// fn rgb_range_test() {
-// 	for r in 0..255 {
-// 		for g in 0..255 {
-// 			for b in 0..255 {
-// 				let c = format!("rgb({}, {}, {})", r, g, b).parse::<Color>().unwrap();
-// 				assert_eq!(c, Color { r: r, g: g, b: b, a: 1.0 });
-// 			}
-// 		}
-// 	}
-// }
+// Use cargo test -- --ignored it you want to use it anyway
+#[test]
+#[ignore]
+fn rgb_range_test() {
+	for r in 0..255 {
+		for g in 0..255 {
+			for b in 0..255 {
+				let c = format!("rgb({}, {}, {})", r, g, b).parse::<Color>().unwrap();
+				assert_eq!(c, Color { r: r, g: g, b: b, a: 1.0 });
+			}
+		}
+	}
+}
 
-// This test is disabled due to practicality concerns
+// This test is disabled by defualt due to practicality concerns
 // Passes but takes quite a long time to do so ~160 million combinations
-// #[test]
-// fn rgba_range_test() {
-// 	for r in 0..255 {
-// 		for g in 0..255 {
-// 			for b in 0..255 {
-// 				let mut a = 0.0;
+// Use cargo test -- --ignored it you want to use it anyway
+#[test]
+#[ignore]
+fn rgba_range_test() {
+	for r in 0..255 {
+		for g in 0..255 {
+			for b in 0..255 {
+				let mut a = 0.0;
 
-// 				while a <= 1.0 {
-// 					let c = format!("rgba({}, {}, {}, {})", r, g, b, a).parse::<Color>().unwrap();
-// 					assert_eq!(c, Color { r: r, g: g, b: b, a: a });
-// 					a+=0.1;
-// 				}
-// 			}
-// 		}
-// 	}
-// }
+				while a <= 1.0 {
+					let c = format!("rgba({}, {}, {}, {})", r, g, b, a).parse::<Color>().unwrap();
+					assert_eq!(c, Color { r: r, g: g, b: b, a: a });
+					a+=0.1;
+				}
+			}
+		}
+	}
+}

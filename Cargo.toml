@@ -1,6 +1,6 @@
 [package]
 name = "css-color-parser"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Katkov Oleksandr <alexx.katkoff@gmail.com>"]
 
 description = "Easy-to-use Rust parser for CSS3 color strings"
