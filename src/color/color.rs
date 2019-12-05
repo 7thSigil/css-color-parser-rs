@@ -28,7 +28,7 @@ use std::fmt;
 use std::num;
 use std::str::FromStr;
 
-use color::named_colors::NAMED_COLORS;
+use crate::color::named_colors::NAMED_COLORS;
 
 /// Color in rgba format,
 /// where {red,green,blue} in 0..255,
@@ -46,7 +46,7 @@ pub struct Color {
 }
 
 impl fmt::Display for Color {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,
                "Color(r: {}, g: {}, b: {}, a: {})",
                self.r,
@@ -78,13 +78,13 @@ impl error::Error for ColorParseError {
         "Failed to parse color"
     }
 
-    fn cause(&self) -> Option<&error::Error> {
+    fn cause(&self) -> Option<&dyn error::Error> {
         None
     }
 }
 
 impl fmt::Display for ColorParseError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "ColorParseError: Invalid format")
     }
 }
@@ -97,8 +97,6 @@ impl str::FromStr for Color {
     type Err = ColorParseError;
 
     fn from_str(s: &str) -> Result<Self, ColorParseError> {
-        use std::ascii::AsciiExt;
-
         let s = s.trim();
         if s.is_empty() {
             return Err(ColorParseError);
@@ -118,7 +116,7 @@ impl str::FromStr for Color {
             if string_char_count == 4 {
                 let (_, value_string) = string.split_at(1);
 
-                let iv = try!(u64::from_str_radix(value_string, 16));
+                let iv = u64::from_str_radix(value_string, 16)?;
 
                 // unlike original js code, NaN is impossible ()
                 if !(iv <= 0xfff) {
@@ -134,7 +132,7 @@ impl str::FromStr for Color {
             } else if string_char_count == 7 {
                 let (_, value_string) = string.split_at(1);
 
-                let iv = try!(u64::from_str_radix(value_string, 16));
+                let iv = u64::from_str_radix(value_string, 16)?;
 
                 // (7thSigil) unlike original js code, NaN is impossible
                 if !(iv <= 0xffffff) {
@@ -152,8 +150,8 @@ impl str::FromStr for Color {
             return Err(ColorParseError);
         }
 
-        let op = try!(string.find("(").ok_or(ColorParseError));
-        let ep = try!(string.find(")").ok_or(ColorParseError));
+        let op = string.find("(").ok_or(ColorParseError)?;
+        let ep = string.find(")").ok_or(ColorParseError)?;
 
         // (7thSigil) validating format
         // ')' bracket should be at the end
@@ -204,11 +202,11 @@ fn parse_rgba(mut rgba: Vec<&str>) -> Result<Color, ColorParseError> {
         return Err(ColorParseError);
     }
 
-    let a_str = try!(rgba.pop().ok_or(ColorParseError));
+    let a_str = rgba.pop().ok_or(ColorParseError)?;
 
-    let a = try!(parse_css_float(a_str));
+    let a = parse_css_float(a_str)?;
 
-    let mut rgb_color = try!(parse_rgb(rgba));
+    let mut rgb_color = parse_rgb(rgba)?;
 
     rgb_color = Color { a: a, ..rgb_color };
 
@@ -221,13 +219,13 @@ fn parse_rgb(mut rgb: Vec<&str>) -> Result<Color, ColorParseError> {
         return Err(ColorParseError);
     }
 
-    let b_str = try!(rgb.pop().ok_or(ColorParseError));
-    let g_str = try!(rgb.pop().ok_or(ColorParseError));
-    let r_str = try!(rgb.pop().ok_or(ColorParseError));
+    let b_str = rgb.pop().ok_or(ColorParseError)?;
+    let g_str = rgb.pop().ok_or(ColorParseError)?;
+    let r_str = rgb.pop().ok_or(ColorParseError)?;
 
-    let r = try!(parse_css_int(r_str));
-    let g = try!(parse_css_int(g_str));
-    let b = try!(parse_css_int(b_str));
+    let r = parse_css_int(r_str)?;
+    let g = parse_css_int(g_str)?;
+    let b = parse_css_int(b_str)?;
 
     return Ok(Color {
         r: r,
@@ -243,12 +241,12 @@ fn parse_hsla(mut hsla: Vec<&str>) -> Result<Color, ColorParseError> {
         return Err(ColorParseError);
     }
 
-    let a_str = try!(hsla.pop().ok_or(ColorParseError));
+    let a_str = hsla.pop().ok_or(ColorParseError)?;
 
-    let a = try!(parse_css_float(a_str));
+    let a = parse_css_float(a_str)?;
 
     // (7thSigil) Parsed from hsl to rgb representation
-    let mut rgb_color: Color = try!(parse_hsl(hsla));
+    let mut rgb_color: Color = parse_hsl(hsla)?;
 
     rgb_color = Color { a: a, ..rgb_color };
 
@@ -261,11 +259,11 @@ fn parse_hsl(mut hsl: Vec<&str>) -> Result<Color, ColorParseError> {
         return Err(ColorParseError);
     }
 
-    let l_str = try!(hsl.pop().ok_or(ColorParseError));
-    let s_str = try!(hsl.pop().ok_or(ColorParseError));
-    let h_str = try!(hsl.pop().ok_or(ColorParseError));
+    let l_str = hsl.pop().ok_or(ColorParseError)?;
+    let s_str = hsl.pop().ok_or(ColorParseError)?;
+    let h_str = hsl.pop().ok_or(ColorParseError)?;
 
-    let mut h = try!(f32::from_str(h_str));
+    let mut h = f32::from_str(h_str)?;
 
     // 0 .. 1
     h = (((h % 360.0) + 360.0) % 360.0) / 360.0;
@@ -273,8 +271,8 @@ fn parse_hsl(mut hsl: Vec<&str>) -> Result<Color, ColorParseError> {
     // NOTE(deanm): According to the CSS spec s/l should only be
     // percentages, but we don't bother and let float or percentage.
 
-    let s = try!(parse_css_float(s_str));
-    let l = try!(parse_css_float(l_str));
+    let s = parse_css_float(s_str)?;
+    let l = parse_css_float(l_str)?;
 
     let m2: f32;
 
@@ -306,11 +304,11 @@ fn parse_css_float(fv_str: &str) -> Result<f32, num::ParseFloatError> {
     if fv_str.ends_with("%") {
         let mut percentage_string = fv_str.to_string();
         percentage_string.pop();
-        fv = try!(f32::from_str(&percentage_string));
+        fv = f32::from_str(&percentage_string)?;
         return Ok(clamp_css_float(fv / 100.0));
     }
 
-    fv = try!(f32::from_str(fv_str));
+    fv = f32::from_str(fv_str)?;
     return Ok(clamp_css_float(fv));
 }
 
@@ -320,12 +318,12 @@ fn parse_css_int(iv_or_percentage_str: &str) -> Result<u8, ColorParseError> {
 
         let mut percentage_string = iv_or_percentage_str.to_string();
         percentage_string.pop();
-        let fv = try!(f32::from_str(&percentage_string));
+        let fv = f32::from_str(&percentage_string)?;
         // Seems to be what Chrome does (round vs truncation).
         return Ok(clamp_css_byte_from_float(fv / 100.0 * 255.0));
     }
 
-    let iv = try!(u32::from_str(iv_or_percentage_str));
+    let iv = u32::from_str(iv_or_percentage_str)?;
 
     return Ok(clamp_css_byte(iv));
 }

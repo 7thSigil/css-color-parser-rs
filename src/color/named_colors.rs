@@ -23,9 +23,9 @@
 // IN THE SOFTWARE.
 
 use std::collections::HashMap;
-use color::color::Color;
+use crate::color::color::Color;
 
-lazy_static! {
+lazy_static::lazy_static! {
     /// List of CSS3 named colors from http://www.w3.org/TR/css3-color.
     pub static ref NAMED_COLORS: HashMap<&'static str, Color> = {
         let mut m = HashMap::new();
