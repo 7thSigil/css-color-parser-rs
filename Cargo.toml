@@ -2,6 +2,7 @@
 name = "css-color-parser"
 version = "0.1.2"
 authors = ["Katkov Oleksandr <alexx.katkoff@gmail.com>"]
+edition = "2018"
 
 description = "Easy-to-use Rust parser for CSS3 color strings"
 documentation = "https://7thsigil.github.io/css-color-parser-rs/css_color_parser/index.html"
@@ -12,4 +13,4 @@ keywords = ["parser", "color", "colour", "css", "css3"]
 license = "MIT"
 
 [dependencies]
-lazy_static = "0.1.*"
+lazy_static = "1"
