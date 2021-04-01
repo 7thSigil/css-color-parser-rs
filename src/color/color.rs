@@ -147,6 +147,22 @@ impl str::FromStr for Color {
                     b: (iv & 0xff) as u8,
                     a: 1.0,
                 });
+            } else if string_char_count == 9 {
+                let (_, value_string) = string.split_at(1);
+
+                let iv = try!(u64::from_str_radix(value_string, 16));
+
+                // (7thSigil) unlike original js code, NaN is impossible
+                if !(iv <= 0xffffffff) {
+                    return Err(ColorParseError);
+                }
+
+                return Ok(Color {
+                    r: ((iv & 0xff000000) >> 24) as u8,
+                    g: ((iv & 0xff0000) >> 16) as u8,
+                    b: ((iv & 0xff00) >> 8) as u8,
+                    a: (((iv & 0xff) as u8) as f32) / 255.,
+                });
             }
 
             return Err(ColorParseError);

@@ -72,6 +72,20 @@ fn abc123() {
                });
 }
 
+
+#[test]
+fn abc123a() {
+    // parse 8-digit #rrggbbaa
+    let c = "#ff0011ff".parse::<Color>().unwrap();
+    assert_eq!(c,
+               Color {
+                   r: 255,
+                   g: 0,
+                   b: 17,
+                   a: 1.0,
+               });
+}
+
 #[test]
 fn named_color() {
     let c = "slateblue".parse::<Color>().unwrap();
